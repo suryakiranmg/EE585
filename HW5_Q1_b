@@ -1,0 +1,21 @@
+clear all, close all, clc;
+R1=1; k1 = [-10:0.01:10].';      %case 1
+R2=1000; k2 = [-10:0.01:10].';   %case 2
+R3 = [0:0.01:20].'; k3 = 2;      %case 3
+%compute H2 norms for each case
+H2_1 = abs(k1).*R1.^3./( 2.*(1+k1.^2).*(2+k1.^2).*(3+2*k1.^2) );
+H2_2 = abs(k2).*R2.^3./( 2.*(1+k2.^2).*(2+k2.^2).*(3+2*k1.^2) );
+H2_3 = abs(k3).*R3.^3./( 2.*(1+k3.^2).*(2+k3.^2).*(3+2*k3.^2) );
+%plots
+figure('Name','Q1_b)Plots of H2_norm as funs of k & R','NumberTitle','off')
+subplot 311;
+plot(k1,H2_1); grid on
+xlabel('k'), ylabel('|H|_2^2, R = 1');
+
+subplot 312; 
+plot(k2,H2_2); grid on;
+xlabel('k'), ylabel('|H|_2^2, R = 1000');
+
+subplot 313
+plot(R3,H2_3);grid on;
+xlabel('R'), ylabel('|H|_2^2, k = 1');
