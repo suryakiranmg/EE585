@@ -1,0 +1,39 @@
+clear all, close all, clc;
+t = [0:10:1000].'; L = length(t);
+%Case a and b
+Ra = 1000; Rb = 1000;
+ka = 0; kb=2;
+%pole 1 and pole 2 for case a
+p1a = (1+ka^2)/Ra; p2a = (2+ka^2)/Ra;  
+%pole 1 and pole 2 for case b
+p1b = (1+kb^2)/Rb; p2b = (2+kb^2)/Rb;
+%Dummy for SVD Calcn ( G = USV', M= Max SV)
+Ga = cell(L,1);Gb = cell(L,1);
+Ua = cell(L,1); Sa = cell(L,1); Va = cell(L,1);
+Ub = cell(L,1); Sb = cell(L,1); Vb = cell(L,1);
+ma = zeros(L,1);mb = zeros(L,1);
+
+for i=1:L
+    %compute the matrix at this time instance
+    Ga{i} = [ka.*Ra.*( exp(-p1a.*t(i))-exp(-p2a.*t(i)) ), exp(-p2a.*t(i))];
+    Gb{i} = [kb.*Rb.*( exp(-p1b.*t(i))-exp(-p2b.*t(i)) ), exp(-p2b.*t(i))];
+    
+    %compute the svd of the matrix at this time instance
+    [Ua{i},Sa{i},Va{i}]=svd(Ga{i});
+    [Ub{i},Sb{i},Vb{i}]=svd(Gb{i});
+   
+    %compute the max singular value of G at time t
+    ma(i) = max(Sa{i});
+    mb(i) = max(Sb{i});
+end
+%plots
+figure('Name','Q1_d)Plots of Max SingValue vs Time','NumberTitle','off')
+subplot 211
+plot(t,ma);grid on;
+ylabel('case a, (R=1000,k=0)')
+title('Max singular value (H-infinity norm)')
+
+subplot 212
+plot(t,mb);grid on;
+xlabel('t')
+ylabel('case b, (R=1000,k=2)')
